@@ -59,10 +59,7 @@ router.post("/login", (req, res) => {
     if (err) return res.status(400).send(err);
 
     if (!user) {
-      res.status(401).send({
-        seccess: false,
-        message: "User not found",
-      });
+      res.status(401).send("User not found");
     } else {
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (err) return res.status(400).send(err);
@@ -77,10 +74,7 @@ router.post("/login", (req, res) => {
             user,
           });
         } else {
-          res.status(401).send({
-            seccess: false,
-            message: "Wrong email or password",
-          });
+          res.status(401).send("Wrong email or password");
         }
       });
     }

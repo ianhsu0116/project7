@@ -1,7 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
-const navComponent = () => {
+const NavComponent = (props) => {
+  let { currentUser, setCurrentUser } = props;
+  const history = useHistory();
+  const handleLogout = () => {
+    AuthService.logout();
+    window.alert("Logout Seccessfully, You are now redirect to login page");
+    setCurrentUser(null);
+    history.push("/");
+  };
   return (
     <div>
       <nav>
@@ -14,21 +23,34 @@ const navComponent = () => {
                     Home
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/register">
-                    Register
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login">
-                    Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="#">
-                    Logout
-                  </Link>
-                </li>
+                {!currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/register">
+                      Register
+                    </Link>
+                  </li>
+                )}
+                {!currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">
+                      Login
+                    </Link>
+                  </li>
+                )}
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link onClick={handleLogout} className="nav-link" to="#">
+                      Logout
+                    </Link>
+                  </li>
+                )}
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/course">
+                      Course
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -38,4 +60,4 @@ const navComponent = () => {
   );
 };
 
-export default navComponent;
+export default NavComponent;

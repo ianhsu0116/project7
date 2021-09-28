@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom"; // 在react等同node的 => redirect
 import AuthService from "../services/auth.service";
 
 const RegisterComponent = () => {
+  const history = useHistory();
   let [username, setUsername] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [role, setRole] = useState("");
+  let [message, setMessage] = useState("");
 
   const handleChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -25,15 +28,19 @@ const RegisterComponent = () => {
         window.alert(
           "Registeration Succeeds! You are now redirect to the login page"
         );
+        history.push("/login");
       })
       .catch((error) => {
-        console.log(error);
+        setMessage(error.response.data);
+        console.log(error.response.data);
       });
   };
   return (
     <div>
       <div style={{ padding: "3rem" }} className="col-md-12">
         <div>
+          {/* 下面語法等同 if(message){} */}
+          {message && <div className="alert alert-danger">{message}</div>}
           <div>
             <label htmlFor="username">Username</label>
             <input

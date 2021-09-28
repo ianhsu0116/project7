@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(cors());
-app.use("/api/user", authRoute); // 前端是用react寫，在前後端整合時會清楚很多
+app.use("/api/user", authRoute); // 後端的route都加個api, 是因為前端是用react寫，在前後端整合時會清楚很多
 app.use(
   "/api/courses",
   passport.authenticate("jwt", { session: false }),

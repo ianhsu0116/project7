@@ -32,6 +32,21 @@ router.get("/:_id", (req, res) => {
     });
 });
 
+// get specific course select by instructor's _id
+router.get("/instructor/:_instructor_id", (req, res) => {
+  let { _instructor_id } = req.body;
+
+  Course.find({ instructor: _instructor_id })
+    .populate("instructor", ["username", "email"])
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send("Can not get course data");
+    });
+});
+
+// post new course
 router.post("/", async (req, res) => {
   // validate the input before making a new course
   const { error } = courseValidation(req.body);
@@ -105,8 +120,6 @@ router.patch("/:_id", async (req, res) => {
 });
 
 // delete the course
-
-module.exports = router;
 router.delete("/:_id", async (req, res) => {
   let { _id } = req.params;
   let course = await Course.findOne({ _id });
@@ -145,3 +158,5 @@ router.delete("/:_id", async (req, res) => {
     });
   }
 });
+
+module.exports = router;
