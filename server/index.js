@@ -26,11 +26,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
-app.use(cors);
-app.use((req, res, next) => {
-  console.log("Connected");
-  next();
-});
+app.use(cors());
 app.use("/api/user", authRoute); // 前端是用react寫，在前後端整合時會清楚很多
 app.use(
   "/api/courses",
@@ -39,6 +35,6 @@ app.use(
 );
 
 // port listen
-app.listen(8788, () => {
+app.listen(8787, () => {
   console.log("Server running on port 8787");
 });

@@ -18,9 +18,8 @@ router.get("/testAPI", (req, res) => {
   return res.json(msgObj);
 });
 
-// 註冊 .post
+// 註冊
 router.post("/register", async (req, res) => {
-  console.log(req.body);
   // check the validation of data
   const { error } = registerValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
