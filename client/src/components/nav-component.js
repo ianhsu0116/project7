@@ -46,8 +46,29 @@ const NavComponent = (props) => {
                 )}
                 {currentUser && (
                   <li className="nav-item">
+                    <Link className="nav-link" to="/profile">
+                      Profile
+                    </Link>
+                  </li>
+                )}
+                {currentUser && (
+                  <li className="nav-item">
                     <Link className="nav-link" to="/course">
                       Course
+                    </Link>
+                  </li>
+                )}
+                {currentUser && currentUser.user.role == "instructor" && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/postCourse">
+                      Post Course
+                    </Link>
+                  </li>
+                )}
+                {currentUser && currentUser.user.role == "student" && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/enrollCourse">
+                      Enroll Course
                     </Link>
                   </li>
                 )}

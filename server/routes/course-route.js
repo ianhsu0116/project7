@@ -32,9 +32,9 @@ router.get("/:_id", (req, res) => {
     });
 });
 
-// get specific course select by instructor's _id
+// 根據instructor _id 找到所有此講師上傳的課程
 router.get("/instructor/:_instructor_id", (req, res) => {
-  let { _instructor_id } = req.body;
+  let { _instructor_id } = req.params;
 
   Course.find({ instructor: _instructor_id })
     .populate("instructor", ["username", "email"])
@@ -43,6 +43,33 @@ router.get("/instructor/:_instructor_id", (req, res) => {
     })
     .catch((err) => {
       res.status(500).send("Can not get course data");
+    });
+});
+
+// 根據學生id 找到所有此學生註冊的課程
+router.get("/student/:_student_id", (req, res) => {
+  let { _student_id } = req.params;
+
+  Course.find({ students: _student_id })
+    .populate("instructor", ["username", "email"])
+    .then((courses) => {
+      res.status(200).send(courses);
+    })
+    .catch((err) => {
+      res.status(500).send("Can not get courses");
+    });
+});
+
+// 根據課程名稱，找到所有符合條件的課程
+router.get("/findByName/:name", (req, res) => {
+  let { name } = req.params;
+  Course.find({ title: { $regex: `${name}` } })
+    .populate("instructor", ["username", "email"])
+    .then((courses) => {
+      res.status(200).send(courses);
+    })
+    .catch((err) => {
+      res.send(500).send("Not found any courses");
     });
 });
 
@@ -70,6 +97,25 @@ router.post("/", async (req, res) => {
     res.status(200).send("New course has been saved!");
   } catch (err) {
     res.status(400).send("cannot save course");
+  }
+});
+
+// 學生報名
+router.post("/enroll/:_id", async (req, res) => {
+  let { _id } = req.params;
+  let { _uesr_id } = req.body;
+  try {
+    let course = await Course.findOne({ _id });
+    let stuExist = await course.students.find((stuID) => stuID === _uesr_id);
+    if (!stuExist) {
+      course.students.push(_uesr_id);
+      await course.save();
+      res.status(200).send("Enroll succeed!");
+    } else {
+      res.status(400).send("Student already enrolled!");
+    }
+  } catch (err) {
+    res.status(404).send("Enroll failed!");
   }
 });
 
